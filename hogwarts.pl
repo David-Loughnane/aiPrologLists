@@ -98,14 +98,14 @@ enrolled_opt(vc,runes).
 
 % what student is enrolled in what courses
 enrolled(SID,SCN) :-
-	comp_course(SCN,_,_);
+	compCourse(SCN,_,_);
 	enrolled_opt(SID,SCN).
 
 % what teacher teaches what courses
 teaches(TN,SCN) :-
 	teacher(TID,TN),
 	(compCourse(SCN,_,TID);
-	optCourse(SCN,_,TID).
+	optCourse(SCN,_,TID)).
 
 % what student is tought by what teacher
 taughtBy(SN,TN) :-
