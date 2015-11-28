@@ -1,4 +1,3 @@
-
 % the students in Hogwarts
 student(hp, 'Harry James Potter', gryffindor).
 student(hg, 'Hermione Jean Granger', gryffindor).
@@ -12,6 +11,7 @@ student(nt, 'Nymphadora Tonks',hufflepuff).
 student(dm, 'Draco Malfoy', slytherin).
 student(gg, 'Gregory Goyle', slytherin).
 student(vc, 'Vincent Crabbe', slytherin).
+student(dl, 'David Loughnane', gryffindor).
 
 % the teachers in Hogwarts
 teacher(ad, 'Albus Percival Wulfric Brian Dumbledore').
@@ -51,5 +51,79 @@ optCourse(div, 'Divination', st).
 optCourse(app, 'Apparition', wt).
 optCourse(choir, 'Frog Choir', ff).
 optCourse(quid, 'Quidditch', mh).
+
+% optional courses taken by students
+enrolled_opt(cc,quid).
+enrolled_opt(cc,arith).
+enrolled_opt(cc,runes).
+enrolled_opt(cd,creatures).
+enrolled_opt(cd,muggle).
+enrolled_opt(cd,runes).
+enrolled_opt(dl,creatures).
+enrolled_opt(dl,muggle).
+enrolled_opt(dl,runes).
+enrolled_opt(dm,creatures).
+enrolled_opt(dm,muggle).
+enrolled_opt(dm,runes).
+enrolled_opt(gg,creatures).
+enrolled_opt(gg,muggle).
+enrolled_opt(gg,runes).
+enrolled_opt(ha,creatures).
+enrolled_opt(ha,arith).
+enrolled_opt(ha,runes).
+enrolled_opt(hg,muggle).
+enrolled_opt(hg,arith).
+enrolled_opt(hg,div).
+enrolled_opt(hg,creatures).
+enrolled_opt(hg,app).
+enrolled_opt(hg,runes).
+enrolled_opt(hp,quid).
+enrolled_opt(hp,arith).
+enrolled_opt(hp,div).
+enrolled_opt(ll,quid).
+enrolled_opt(ll,arith).
+enrolled_opt(ll,div).
+enrolled_opt(nt,creatures).
+enrolled_opt(nt,muggle).
+enrolled_opt(nt,runes).
+enrolled_opt(rw,quid).
+enrolled_opt(rw,arith).
+enrolled_opt(rw,div).
+enrolled_opt(tb,quid).
+enrolled_opt(tb,arith).
+enrolled_opt(tb,runes).
+enrolled_opt(vc,creatures).
+enrolled_opt(vc,muggle).
+enrolled_opt(vc,runes).
+
+% what student is enrolled in what courses
+enrolled(SID,SCN) :-
+	comp_course(SCN,_,_);
+	enrolled_opt(SID,SCN).
+
+% what teacher teaches what courses
+teaches(TN,SCN) :-
+	teacher(TID,TN),
+	(compCourse(SCN,_,TID);
+	optCourse(SCN,_,TID).
+
+% what student is tought by what teacher
+taughtBy(SN,TN) :-
+	student(SID,SN,_),
+	enrolled(SID,SCN),
+	teaches(TN,SCN).
+	
+
+
+
+
+
+
+
+
+
+
+
+
 
 
