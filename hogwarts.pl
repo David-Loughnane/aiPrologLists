@@ -120,7 +120,9 @@ takesOption(SN,CN) :-
 	optCourse(SCN,CN,_).
 	
 % 7 
-%takesAllOptions(SN,OptCourses)
+takesAllOptions(SN,OptCourses) :-
+	setof(CN,takesOption(SN,CN),OptCourses).
+
 
 % 8 
 %studentsInHouse(House,Students)
