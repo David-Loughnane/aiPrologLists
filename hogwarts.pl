@@ -52,7 +52,7 @@ optCourse(app, 'Apparition', wt).
 optCourse(choir, 'Frog Choir', ff).
 optCourse(quid, 'Quidditch', mh).
 
-% optional courses taken by students
+% 2 optional courses taken by students
 enrolled_opt(cc,quid).
 enrolled_opt(cc,arith).
 enrolled_opt(cc,runes).
@@ -96,31 +96,46 @@ enrolled_opt(vc,creatures).
 enrolled_opt(vc,muggle).
 enrolled_opt(vc,runes).
 
-% what student is enrolled in what courses
+% 3 what student is enrolled in what courses
 enrolled(SID,SCN) :-
 	compCourse(SCN,_,_);
 	enrolled_opt(SID,SCN).
 
-% what teacher teaches what courses
+% 4 what teacher teaches what courses
 teaches(TN,SCN) :-
 	teacher(TID,TN),
 	(compCourse(SCN,_,TID);
 	optCourse(SCN,_,TID)).
 
-% what student is tought by what teacher
+% 5 what student is taught by what teacher
 taughtBy(SN,TN) :-
 	student(SID,SN,_),
 	enrolled(SID,SCN),
 	teaches(TN,SCN).
+
+% 6 what optional courses is the student enrolled in
+takesOption(SN,CN) :-
+	student(SID,SN,_),
+	enrolled_opt(SID,SCN),
+	optCourse(SCN,CN,_).
 	
+% 7 
+%takesAllOptions(SN,OptCourses)
 
+% 8 
+%studentsInHouse(House,Students)
 
+% 9
+%studentsOnCourse(SCN,CN,StudentsByHouse)
 
+% 10
+sharedCourse(SN1,SN2,CN) :-
+	takesOption(SN1,CN),
+	takesOption(SN2,CN),
+	SN1 \= SN2.
 
-
-
-
-
+% 11
+%sameOptions(SN1, SN2, Courses).
 
 
 
