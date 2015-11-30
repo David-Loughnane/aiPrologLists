@@ -135,11 +135,16 @@ studentsInHouse(House,Students) :-
 
 
 /* Q9 list of all students on course by house */
-studentsOnCourse(SCN,CN,StudentsByHouse) :-
-    setof([House-Students],studentsInHouse(House,Students),StudentsByHouse),
+enrolled_student(SN,SCN,House) :-
     student(SID,SN,House),
-    (compCourse(SCN,CN,_);optCourse(SCN,CN,_)),
-    enrolled(SID,SCN).
+    (compCourse(SCN,_,_); enrolled_opt(SID,SCN)).
+    
+enrolledStudentsInHouse(SCN,House,EnrolledStudents):-
+    setof(SN,enrolled_student(SN,SCN,House),EnrolledStudents).
+
+studentsOnCourse(SCN,CN,StudentsByHouse) :-
+    setof([House-EnrolledStudents],enrolledStudentsInHouse(SCN,House,EnrolledStudents),StudentsByHouse),
+    (compCourse(SCN,CN,_) ; optCourse(SCN,CN,_)).
 
 
 /* Q10 two students who share same option course */
