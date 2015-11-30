@@ -143,10 +143,10 @@ enrolled_student(SN,SCN,House) :-
     
 /* helper - generate list of students enrolled in course */
 enrolledStudentsInHouse(SCN,House,EnrolledStudents):-
-    setof(SN,enrolled_student(SN,SCN,House),EnrolledStudents).
+    bagof(SN,enrolled_student(SN,SCN,House),EnrolledStudents).
 
 studentsOnCourse(SCN,CN,StudentsByHouse) :-
-    setof(House-EnrolledStudents,enrolledStudentsInHouse(SCN,House,EnrolledStudents),StudentsByHouse),
+    bagof(House-EnrolledStudents,enrolledStudentsInHouse(SCN,House,EnrolledStudents),StudentsByHouse),
     (compCourse(SCN,CN,_) ; optCourse(SCN,CN,_)).
 
 
