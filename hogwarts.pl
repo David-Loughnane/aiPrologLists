@@ -1,4 +1,4 @@
-% the students in Hogwarts
+/* the students in Hogwarts */
 student(hp, 'Harry James Potter', gryffindor).
 student(hg, 'Hermione Jean Granger', gryffindor).
 student(rw, 'Ronald Weasley', gryffindor).
@@ -13,7 +13,7 @@ student(gg, 'Gregory Goyle', slytherin).
 student(vc, 'Vincent Crabbe', slytherin).
 student(dl, 'David Loughnane', gryffindor).
 
-% the teachers in Hogwarts
+/* the teachers in Hogwarts */
 teacher(ad, 'Albus Percival Wulfric Brian Dumbledore').
 teacher(ff, 'Filius Flitwick').
 teacher(rh, 'Rubeus Hagrid').
@@ -32,7 +32,7 @@ teacher(sv, 'Septima Vector').
 teacher(chb, 'Charity Burbage').
 teacher(wt, 'Wilkie Twycross').
 
-% compulsory courses for the MSc in Magic
+/* compulsory courses for the MSc in Magic */
 compCourse(astro, 'Astronomy', as).
 compCourse(charms, 'Charms', ff).
 compCourse(defence, 'Defence against the Dark Arts', qq).
@@ -42,7 +42,7 @@ compCourse(history, 'History of Magic', cub).
 compCourse(potions, 'Potions', ss).
 compCourse(trans, 'Transfiguration', mm).
 
-% optional courses for the MSc in Magic
+/* optional courses for the MSc in Magic */
 optCourse(runes, 'Study of Ancient Runes', bb).
 optCourse(arith, 'Arithmancy', sv).
 optCourse(muggle, 'Muggle Studies', chb).
@@ -52,7 +52,7 @@ optCourse(app, 'Apparition', wt).
 optCourse(choir, 'Frog Choir', ff).
 optCourse(quid, 'Quidditch', mh).
 
-% Q2 optional courses taken by students
+/* Q2 optional courses taken by students */
 enrolled_opt(cc,quid).
 enrolled_opt(cc,arith).
 enrolled_opt(cc,runes).
@@ -97,56 +97,59 @@ enrolled_opt(vc,muggle).
 enrolled_opt(vc,runes).
 
 
-% Q3 what student is enrolled in what courses
+/* Q3 what student is enrolled in what courses */
 enrolled(SID,SCN) :-
-    compCourse(SCN,_,_); 
-enrolled_opt(SID,SCN).
+    compCourse(SCN,_,_); enrolled_opt(SID,SCN).
 
 
-% Q4 what teacher teaches what courses
+/* Q4 what teacher teaches what courses */
 teaches(TN,SCN) :-
     teacher(TID,TN),
     (compCourse(SCN,_,TID);
      optCourse(SCN,_,TID)).
 
 
-% Q5 what student is taught by what teacher
+/* Q5 what student is taught by what teacher */
 taughtBy(SN,TN) :-
     student(SID,SN,_),
     enrolled(SID,SCN),
     teaches(TN,SCN).
 
 
-% Q6 optional course student enrolled in
+/* Q6 optional course student enrolled in */
 takesOption(SN,CN) :-
     student(SID,SN,_),
     enrolled_opt(SID,SCN),
     optCourse(SCN,CN,_).
 
 	
-% Q7 list of all optional courses student enrolled in 
+/* Q7 list of all optional courses student enrolled in */
 takesAllOptions(SN,OptCourses) :-
     setof(CN,takesOption(SN,CN),OptCourses).
 
 
-% Q8 lists all students in each house 
+/* Q8 lists all students in each house */ 
 studentsInHouse(House,Students) :-
     setof([SID,SN],student(SID,SN,House),L),
     findall(SN,member([_,SN],L),Students).
 
 
-% Q8 list of all students on course by house
-%studentsOnCourse(SCN,CN,StudentsByHouse) :-
-    
+/* Q9 list of all students on course by house */
+studentsOnCourse(SCN,CN,StudentsByHouse) :-
+    setof([House,Students],studentsInHouse(House,Students),StudentsByHouse),
+    student(SID,SN,House),
+    (compCourse(SCN,CN,_);optCourse(SCN,CN,_)),
+    enrolled(SID,SCN).
 
-% Q10 two students who share same option course
+
+/* Q10 two students who share same option course */
 sharedCourse(SN1,SN2,CN) :-
     takesOption(SN1,CN),
     takesOption(SN2,CN),
     SN1 \= SN2.
 
 
-% Q11 two students who share 3 optional courses
+/* Q11 two students who share 3 optional courses */
 sameOptions(SN1, SN2, Courses) :-
     setof(CN,sharedCourse(SN1,SN2,CN),Courses),
     length(Courses,3).
