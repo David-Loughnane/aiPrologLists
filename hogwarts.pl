@@ -135,15 +135,18 @@ studentsInHouse(House,Students) :-
 
 
 /* Q9 list of all students on course by house */
+
+/* helper - students, by house that are register to take course*/
 enrolled_student(SN,SCN,House) :-
     student(SID,SN,House),
     (compCourse(SCN,_,_); enrolled_opt(SID,SCN)).
     
+/* helper - generate list of students enrolled in course */
 enrolledStudentsInHouse(SCN,House,EnrolledStudents):-
     setof(SN,enrolled_student(SN,SCN,House),EnrolledStudents).
 
 studentsOnCourse(SCN,CN,StudentsByHouse) :-
-    setof([House-EnrolledStudents],enrolledStudentsInHouse(SCN,House,EnrolledStudents),StudentsByHouse),
+    setof(House-EnrolledStudents,enrolledStudentsInHouse(SCN,House,EnrolledStudents),StudentsByHouse),
     (compCourse(SCN,CN,_) ; optCourse(SCN,CN,_)).
 
 
