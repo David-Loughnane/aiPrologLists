@@ -123,9 +123,14 @@ takesOption(SN,CN) :-
 takesAllOptions(SN,OptCourses) :-
 	setof(CN,takesOption(SN,CN),OptCourses).
 
-
 % 8 
-%studentsInHouse(House,Students)
+studentsInHouse(House,Students) :-	
+	findall([SID,SN],student(SID,SN,House),Students).
+	%sort(L,Students).
+	%sbagof(SN,member,Students).
+	
+
+
 
 % 9
 %studentsOnCourse(SCN,CN,StudentsByHouse)
@@ -137,10 +142,7 @@ sharedCourse(SN1,SN2,CN) :-
 	SN1 \= SN2.
 
 % 11
-%sameOptions(SN1, SN2, Courses).
-
-
-
-
-
+sameOptions(SN1, SN2, Courses) :-
+    setof(CN,sharedCourse(SN1,SN2,CN),Courses),
+    length(Courses,3).
 
