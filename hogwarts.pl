@@ -136,7 +136,7 @@ studentsInHouse(House,Students) :-
 
 /* Q9 list of all students on course by house */
 studentsOnCourse(SCN,CN,StudentsByHouse) :-
-    setof([House,Students],studentsInHouse(House,Students),StudentsByHouse),
+    setof([House-Students],studentsInHouse(House,Students),StudentsByHouse),
     student(SID,SN,House),
     (compCourse(SCN,CN,_);optCourse(SCN,CN,_)),
     enrolled(SID,SCN).
