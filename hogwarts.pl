@@ -52,7 +52,7 @@ optCourse(app, 'Apparition', wt).
 optCourse(choir, 'Frog Choir', ff).
 optCourse(quid, 'Quidditch', mh).
 
-% 2 optional courses taken by students
+% Q2 optional courses taken by students
 enrolled_opt(cc,quid).
 enrolled_opt(cc,arith).
 enrolled_opt(cc,runes).
@@ -96,52 +96,57 @@ enrolled_opt(vc,creatures).
 enrolled_opt(vc,muggle).
 enrolled_opt(vc,runes).
 
-% 3 what student is enrolled in what courses
+
+% Q3 what student is enrolled in what courses
 enrolled(SID,SCN) :-
-	compCourse(SCN,_,_);
-	enrolled_opt(SID,SCN).
+    compCourse(SCN,_,_); 
+enrolled_opt(SID,SCN).
 
-% 4 what teacher teaches what courses
+
+% Q4 what teacher teaches what courses
 teaches(TN,SCN) :-
-	teacher(TID,TN),
-	(compCourse(SCN,_,TID);
-	optCourse(SCN,_,TID)).
+    teacher(TID,TN),
+    (compCourse(SCN,_,TID);
+     optCourse(SCN,_,TID)).
 
-% 5 what student is taught by what teacher
+
+% Q5 what student is taught by what teacher
 taughtBy(SN,TN) :-
-	student(SID,SN,_),
-	enrolled(SID,SCN),
-	teaches(TN,SCN).
+    student(SID,SN,_),
+    enrolled(SID,SCN),
+    teaches(TN,SCN).
 
-% 6 what optional courses is the student enrolled in
+
+% Q6 optional course student enrolled in
 takesOption(SN,CN) :-
-	student(SID,SN,_),
-	enrolled_opt(SID,SCN),
-	optCourse(SCN,CN,_).
+    student(SID,SN,_),
+    enrolled_opt(SID,SCN),
+    optCourse(SCN,CN,_).
+
 	
-% 7 
+% Q7 list of all optional courses student enrolled in 
 takesAllOptions(SN,OptCourses) :-
-	setof(CN,takesOption(SN,CN),OptCourses).
-
-% 8 
-studentsInHouse(House,Students) :-	
-	findall([SID,SN],student(SID,SN,House),Students).
-	%sort(L,Students).
-	%sbagof(SN,member,Students).
-	
+    setof(CN,takesOption(SN,CN),OptCourses).
 
 
+% Q8 lists all students in each house 
+studentsInHouse(House,Students) :-
+    setof([SID,SN],student(SID,SN,House),L),
+    findall(SN,member([_,SN],L),Students).
 
-% 9
-%studentsOnCourse(SCN,CN,StudentsByHouse)
 
-% 10
+% Q8 list of all students on course by house
+%studentsOnCourse(SCN,CN,StudentsByHouse) :-
+    
+
+% Q10 two students who share same option course
 sharedCourse(SN1,SN2,CN) :-
-	takesOption(SN1,CN),
-	takesOption(SN2,CN),
-	SN1 \= SN2.
+    takesOption(SN1,CN),
+    takesOption(SN2,CN),
+    SN1 \= SN2.
 
-% 11
+
+% Q11 two students who share 3 optional courses
 sameOptions(SN1, SN2, Courses) :-
     setof(CN,sharedCourse(SN1,SN2,CN),Courses),
     length(Courses,3).
