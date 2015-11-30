@@ -146,7 +146,7 @@ enrolledStudentsInHouse(SCN,House,EnrolledStudents):-
     findall(SN,enrolled_student(SN,SCN,House),EnrolledStudents).
 
 studentsOnCourse(SCN,CN,StudentsByHouse) :-
-    findall(House-EnrolledStudents,enrolledStudentsInHouse(SCN,House,EnrolledStudents),StudentsByHouse),
+    bagof(House-EnrolledStudents,enrolledStudentsInHouse(SCN,House,EnrolledStudents),StudentsByHouse),
     (compCourse(SCN,CN,_) ; optCourse(SCN,CN,_)).
 
 
